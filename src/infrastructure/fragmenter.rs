@@ -58,7 +58,7 @@ impl Fragmentation {
         } else {
             0
         };
-        ((payload_length / fragment_size) + remainder)
+        (payload_length / fragment_size) + remainder
     }
 
     /// Splits the given payload into fragments and write those fragments to the passed packet data.
@@ -66,9 +66,7 @@ impl Fragmentation {
         let mut fragments = Vec::new();
 
         let payload_length = payload.len() as u16;
-        let num_fragments =
-            // Safe cast max fragments is u8
-            Fragmentation::fragments_needed(payload_length, config.fragment_size) as u8;
+        let num_fragments = Fragmentation::fragments_needed(payload_length, config.fragment_size);
 
         if num_fragments > config.max_fragments {
             return Err(FragmentErrorKind::ExceededMaxFragments.into());
@@ -76,8 +74,8 @@ impl Fragmentation {
 
         for fragment_id in 0..num_fragments {
             // get start and end position of buffer
-            let start_fragment_pos = u16::from(fragment_id) * config.fragment_size;
-            let mut end_fragment_pos = (u16::from(fragment_id) + 1) * config.fragment_size;
+            let start_fragment_pos = fragment_id * config.fragment_size;
+            let mut end_fragment_pos = (fragment_id + 1) * config.fragment_size;
 
             // If remaining buffer fits int one packet just set the end position to the length of the packet payload.
             if end_fragment_pos > payload_length {

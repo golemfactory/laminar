@@ -18,12 +18,8 @@ pub struct Config {
     pub max_packet_size: usize,
     /// Value which can specify the maximal allowed fragments.
     ///
-    /// Why can't I have more than 255 (u8)?
-    /// This is because you don't want to send more then 256 fragments over UDP, with high amounts of fragments the chance for an invalid packet is very high.
-    /// Use TCP instead (later we will probably support larger ranges but every fragment packet then needs to be resent if it doesn't get an acknowledgment).
-    ///
     /// default: 16 but keep in mind that lower is better.
-    pub max_fragments: u8,
+    pub max_fragments: u16,
     /// Value which can specify the size of a fragment.
     ///
     /// This is the maximum size of each fragment. It defaults to `1450` bytes, due to the default MTU on most network devices being `1500`.
@@ -64,7 +60,7 @@ impl Default for Config {
             idle_connection_timeout: Duration::from_secs(5),
             heartbeat_interval: None,
             max_packet_size: (MAX_FRAGMENTS_DEFAULT * FRAGMENT_SIZE_DEFAULT) as usize,
-            max_fragments: MAX_FRAGMENTS_DEFAULT as u8,
+            max_fragments: MAX_FRAGMENTS_DEFAULT as u16,
             fragment_size: FRAGMENT_SIZE_DEFAULT,
             fragment_reassembly_buffer_size: 64,
             receive_buffer_max_size: DEFAULT_MTU as usize,
