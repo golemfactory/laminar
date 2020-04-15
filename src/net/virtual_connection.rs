@@ -188,13 +188,11 @@ impl VirtualConnection {
                                         fragments_needed,
                                     );
 
-                                    if fragment_id == 0 {
-                                        builder = builder.with_acknowledgment_header(
-                                            self.acknowledge_handler.local_sequence_num(),
-                                            self.acknowledge_handler.remote_sequence_num(),
-                                            self.acknowledge_handler.ack_bitfield(),
-                                        );
-                                    }
+                                    builder = builder.with_acknowledgment_header(
+                                        self.acknowledge_handler.local_sequence_num(),
+                                        self.acknowledge_handler.remote_sequence_num(),
+                                        self.acknowledge_handler.ack_bitfield(),
+                                    );
 
                                     builder.build()
                                 })
@@ -1009,7 +1007,7 @@ mod tests {
         // the first fragment of an sequence of fragments contains also the acknowledgment header.
         assert_eq!(
             packets.fold(0, |acc, p| acc + p.contents().len()),
-            4000 + (fragment_packet_size * 4 + constants::ACKED_PACKET_HEADER) as usize
+            4000 + (fragment_packet_size * 4 + constants::ACKED_PACKET_HEADER * 4) as usize
         );
     }
 
