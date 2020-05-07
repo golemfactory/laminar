@@ -10,6 +10,9 @@ pub enum SocketEvent {
     /// A new client connected.
     /// Clients are uniquely identified by the ip:port combination at this layer.
     Connect(SocketAddr),
+    /// Established a new connection to a client.
+    /// Clients are uniquely identified by the ip:port combination at this layer.
+    ConnectTo(SocketAddr),
     /// The client has been idling for a configurable amount of time.
     /// You can control the timeout in the config.
     Timeout(SocketAddr),

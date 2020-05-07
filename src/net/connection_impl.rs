@@ -17,6 +17,7 @@ impl ConnectionEventAddress for SocketEvent {
         match self {
             SocketEvent::Packet(packet) => packet.addr(),
             SocketEvent::Connect(addr) => *addr,
+            SocketEvent::ConnectTo(addr) => *addr,
             SocketEvent::Timeout(addr) => *addr,
         }
     }
@@ -49,6 +50,8 @@ impl Connection for VirtualConnection {
         // emit connect event if this is initiated by the remote host.
         if initial_data.is_some() {
             messenger.send_event(&address, SocketEvent::Connect(address));
+        } else {
+            messenger.send_event(&address, SocketEvent::ConnectTo(address));
         }
         VirtualConnection::new(address, messenger.config(), time)
     }

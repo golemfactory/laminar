@@ -419,7 +419,7 @@ mod tests {
 
         while let Some(message) = server.recv() {
             match message {
-                SocketEvent::Connect(_) => {}
+                SocketEvent::Connect(_) | SocketEvent::ConnectTo(_) => {}
                 SocketEvent::Packet(packet) => {
                     let byte = packet.payload()[0];
                     assert![!seen.contains(&byte)];
@@ -459,7 +459,7 @@ mod tests {
         let mut cnt = 0;
         while let Some(message) = server.recv() {
             match message {
-                SocketEvent::Connect(_) => {}
+                SocketEvent::Connect(_) | SocketEvent::ConnectTo(_) => {}
                 SocketEvent::Packet(_) => {
                     cnt += 1;
                 }
